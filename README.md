@@ -44,7 +44,7 @@ php container: `docker exec -it ${CONTAINER_NAME} sh`
 
 ### Mailhog Configuration
 
--   Install (WordPress Mail SMTP Plugin)[https://wordpress.org/plugins/wp-mail-smtp/]
+-   Install [WordPress Mail SMTP Plugin](https://wordpress.org/plugins/wp-mail-smtp/)
 -   Navigate to WP Mail SMTP > Settings and Select PHP as mailer option
 -   Navigate to WP Mail SMTP > Tools > Email Test
     in Send To set the address to `dev@mailhog.local` as a result you'de see a warning, ignore it and check mailhog to see the email
