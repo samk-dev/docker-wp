@@ -1,8 +1,35 @@
 # Docker WP
 
-Local development setup for WordPress using Docker && Docker Compose with Nginx - PHP-FPM - MySql - PHP MyAdmin - Mailhog
+Local development setup for WordPress using Docker && Docker Compose with Nginx - PHP-FPM - MySql - PHP MyAdmin - Mailhog - Self-Signed SSL Certificates
 
 ## Getting Started
+
+We should set our enviornment variables and generate our self-signed ssl certificates. _If you don't want to enable ssl certificates please comment or remove the follwoing code to avoid errors. `docker-compose.yml` lines: 13 and 18 - `etc/config/nginx.conf` lines: 83 to the end of file_
+
+### Preparing Stuff
+
+```bash
+# Rename .env-example to .env
+mv .env-example .env
+
+## Generate Self-Signed SSL Certificate ##
+
+# Navigate to scripts/
+cd etc/scripts/
+
+# Give excution permissions to the script
+chmod u+x self-signed-init.sh
+
+# Execute the script
+./self-signed-init.sh localhost
+
+# Navigate to etc/
+cd ..
+
+# Move certificates to etc/certs/live/localhost
+mv cert.pem certs/live/localhost/fullchain.pem
+mv key.pem certs/live/localhost/privkey.pem
+```
 
 ### Starting Up Containers
 
@@ -10,11 +37,15 @@ from the project root run `docker-compose up -d` this will build and run the con
 
 **From any web browser access:**
 
-HTTP - [http://localhost:${PORT_NGINX}](http://localhost) - you should see a php info page
+Webserver HTTP - [http://localhost:${PORT_NGINX}](http://localhost)
+
+Webserver HTTPS - [https://localhost:${PORT_NGINX}](https://localhost) - you may get a broswer alert of an insecure content, just press proceed anyway. On chrome sometimes you may not see the proceed button anyway, you can find a fix here: [Bypass invalid certificate in chrome - NET::ERR_CERT_INVALID error](https://dblazeski.medium.com/chrome-bypass-net-err-cert-invalid-for-development-daefae43eb12)
 
 PHP MyAdmin - [http://localhost:${PORT_PHP_MYADMIN}](http://localhost:8080)
 
 Mailhog - [http://localhost:${PORT_MAILHOG_UI}](http://localhost:8025)
+
+Portainer - [http://localhost:${PORT_MAILHOG_UI}](http://localhost:8025)
 
 ## Connect to the Database
 
