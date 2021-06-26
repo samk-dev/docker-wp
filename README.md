@@ -92,4 +92,5 @@ npm install
 ### Xdebug Configuration
 
 -   Inside `etc/config/wordpress.ini` change `xdebug.remote_host` to your local machine ip address
+-   Restart appserver container `docker restart appserver` _if you changed the service name make sure to refrence it instead of appserver_
 -   From php/wp container shell run `php -i | grep Xdebug` you should see xdebug version ++ more information
