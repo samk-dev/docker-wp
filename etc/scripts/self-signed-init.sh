@@ -46,9 +46,6 @@ fi
 openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem \
     -days 365 -nodes -subj '/CN='${FQDN_OR_IP}''
 
-mv cert.pem ${CERTS}/live/${FQDN_OR_IP}/fullchain.pem
-mv key.pem ${CERTS}/live/${FQDN_OR_IP}/privkey.pem
-
 echo "INFO: update the nginx/default.conf file"
 echo "-  4:   server_name ${FQDN_OR_IP};"
 echo "- 19:   server_name               ${FQDN_OR_IP} www.${FQDN_OR_IP};"
