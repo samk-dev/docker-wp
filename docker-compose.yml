@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
-    nginx:
+    webserver:
         build:
             context: .
             dockerfile: etc/docker/nginx.dockerfile
@@ -10,19 +10,19 @@ services:
         tty: true
         ports:
             - ${PORT_NGINX}:80
-            - ${PORT_NGINX_SSL}:443
+            #- ${PORT_NGINX_SSL}:443
         depends_on:
-            - php
+            - appserver
         volumes:
-            - ./server:/var/www/html
-            - ./etc/ssl:/etc/ssl
+            - ./app:/var/www/html
+            #- ./etc/ssl:/etc/ssl
             - ./etc/config/nginx.conf:/etc/nginx/conf.d/default.conf
         links:
-            - php
+            - appserver
         networks:
             - docker-wp
-    mysql:
-        image: mysql:5.7.34
+    dbserver:
+        image: mysql:8.0
         container_name: ${APP_NAME}-dbserver
         command: --default-authentication-plugin=mysql_native_password
         restart: always
@@ -38,7 +38,7 @@ services:
             - ${PORT_MYSQL}:3306
         networks:
             - docker-wp
-    php:
+    appserver:
         build:
             context: .
             dockerfile: etc/docker/php.dockerfile
@@ -46,7 +46,7 @@ services:
         restart: unless-stopped
         volumes:
             - ./etc/config/wordpress.ini:/usr/local/etc/php/conf.d/wordpress.ini
-            - ./server:/var/www/html
+            - ./app:/var/www/html
         environment:
             WORDPRESS_DB_HOST: dbserver
             MYSQL_ROOT_PASSWORD: ${WORDPRESS_DB_PASSWORD}
@@ -55,9 +55,10 @@ services:
             WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
             WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX}
         depends_on:
-            - mysql
+            - dbserver
         links:
-            - mysql
+            - dbserver
+            - mailserver
         networks:
             - docker-wp
     dbadmin:
@@ -65,20 +66,23 @@ services:
         container_name: ${APP_NAME}-myadmin
         restart: always
         links:
-            - mysql
+            - dbserver
         ports:
             - ${PORT_PHP_MYADMIN}:80
         environment:
-            MYSQL_USERNAME: root
+            MYSQL_USERNAME: ${MYSQL_ROOT_USER}
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
             PMA_ARBITRARY: 1
         networks:
             - docker-wp
-    mailhog:
+    mailserver:
         image: mailhog/mailhog
+        container_name: ${APP_NAME}-mailhog
         ports:
             - ${PORT_MAILHOG_SERVER}:1025
             - ${PORT_MAILHOG_UI}:8025
+        networks:
+            - docker-wp
     portainer:
         image: portainer/portainer-ce:alpine
         container_name: ${APP_NAME}-portainer

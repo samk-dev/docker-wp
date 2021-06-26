@@ -1,6 +1,10 @@
 # Install Linux Alpine with Ngnix
 FROM nginx:1.21-alpine
 
+# Install vim && nano
+RUN apk update \
+    && apk add less vim nano
+
 # Set working dir to /etc/ngnix
 WORKDIR /etc/nginx/conf.d
 
@@ -14,4 +18,4 @@ RUN mv nginx.conf default.conf
 WORKDIR /var/www/html
 
 # Copy all files to working dir
-COPY server .
+COPY app .
