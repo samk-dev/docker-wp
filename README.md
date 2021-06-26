@@ -9,6 +9,12 @@ We should set our enviornment variables and generate our self-signed ssl certifi
 ### Preparing Stuff
 
 ```bash
+# Clone the repository
+git clone git@github.com:samk-dev/docker-wp.git
+
+# Navigate to docker-wp
+cd docker-wp
+
 # Rename .env-example to .env
 mv .env-example .env
 
