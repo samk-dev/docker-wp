@@ -78,6 +78,8 @@ composer create-project roots/sage your-theme-name
 
 # Install all the necessary dependencies to run the build process
 yarn
+# OR
+npm install
 ```
 
 ### Mailhog Configuration
