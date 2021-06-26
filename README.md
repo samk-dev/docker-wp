@@ -76,6 +76,9 @@ cd wp-content/themes
 # Install Sage
 composer create-project roots/sage your-theme-name
 
+# Navigate to your-theme-name
+cd your-theme-name
+
 # Install all the necessary dependencies to run the build process
 yarn
 # OR
