@@ -57,7 +57,7 @@ from the project root run `docker-compose up -d` this will build and run the con
 
 -   Webserver HTTP - [http://localhost:${PORT_NGINX}](http://localhost)
 -   Webserver HTTPS - [https://localhost:${PORT_NGINX}](https://localhost) - you may get a broswer alert of an insecure content, just press proceed anyway. On chrome sometimes you may not see the proceed button anyway, you can find a fix here: [Bypass invalid certificate in chrome - NET::ERR_CERT_INVALID error](https://dblazeski.medium.com/chrome-bypass-net-err-cert-invalid-for-development-daefae43eb12)
-    -PHP MyAdmin - [http://localhost:${PORT_PHP_MYADMIN}](http://localhost:8080)
+-   PHP MyAdmin - [http://localhost:${PORT_PHP_MYADMIN}](http://localhost:8080)
 -   Mailhog - [http://localhost:${PORT_MAILHOG_UI}](http://localhost:8025)
 -   Portainer - [http://localhost:${PORT_MAILHOG_UI}](http://localhost:8025)
 
