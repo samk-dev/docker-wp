@@ -16,7 +16,33 @@ PHP MyAdmin - [http://localhost:${PORT_PHP_MYADMIN}](http://localhost:8080)
 
 Mailhog - [http://localhost:${PORT_MAILHOG_UI}](http://localhost:8025)
 
-## Connect to the Database using PHP MyAdmin
+## Connect to the Database
+
+### wp-config.php
+
+```php
+/** MySQL settings - You can get this info from your web host **/
+
+/** The name of the database for WordPress */
+define( 'DB_NAME', $MYSQL_DATABASE );
+
+/** MySQL database username */
+define( 'DB_USER', $MYSQL_ROOT_USER );
+
+/** MySQL database password */
+define( 'DB_PASSWORD', $MYSQL_ROOT_PASSWORD );
+
+/** MySQL hostname */
+define( 'DB_HOST', '<container_name>:<container_port>' );
+
+/** Database Charset to use in creating database tables. */
+define( 'DB_CHARSET', 'utf8' );
+
+/** The Database Collate type. Don't change this if in doubt. */
+define( 'DB_COLLATE', '' );
+```
+
+### Connect to the Database using PHP MyAdmin
 
 **Login Credentials:**
 
@@ -24,7 +50,7 @@ Mailhog - [http://localhost:${PORT_MAILHOG_UI}](http://localhost:8025)
 -   Username: ${MYSQL_ROOT_USER}
 -   Password: ${MYSQL_ROOT_PASSWORD}
 
-## Connect to the Database using database clients like Table Plus
+### Connect to the Database using database clients like Table Plus
 
 **Login Credentials:**
 
@@ -36,11 +62,23 @@ Mailhog - [http://localhost:${PORT_MAILHOG_UI}](http://localhost:8025)
 
 ## Access containers shell:
 
-ngnix container: `docker exec -it ${CONTAINER_NAME} sh`
+You can access any container shell by using the command `docker exec -it ${CONTAINER_NAME} sh` and `exit` to exit
 
-mysql container: `docker exec -it ${CONTAINER_NAME} sh`
+_Example by installing [Sage Starter Theme by the guys at root.io](https://roots.io/sage/):_
 
-php container: `docker exec -it ${CONTAINER_NAME} sh`
+```bash
+# Access WP container
+docker exec -it docker-wp-wp sh
+
+# Navigate to wp-content/themes
+cd wp-content/themes
+
+# Install Sage
+composer create-project roots/sage your-theme-name
+
+# Install all the necessary dependencies to run the build process
+yarn
+```
 
 ### Mailhog Configuration
 
