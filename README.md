@@ -18,7 +18,11 @@ Mailhog - [http://localhost:${PORT_MAILHOG_UI}](http://localhost:8025)
 
 ## Connect to the Database
 
+The variables refrenced in the examples are the values you set in .env @ project root
+
 ### wp-config.php
+
+_When running `docker-compose up` the first install will already fill the db credentials for you, so if you want to modify change the wp-config settings_
 
 ```php
 /** MySQL settings - You can get this info from your web host **/
@@ -44,15 +48,11 @@ define( 'DB_COLLATE', '' );
 
 ### Connect to the Database using PHP MyAdmin
 
-**Login Credentials:**
-
 -   Server: mysql:${PORT_MYSQL}
 -   Username: ${MYSQL_ROOT_USER}
 -   Password: ${MYSQL_ROOT_PASSWORD}
 
 ### Connect to the Database using database clients like Table Plus
-
-**Login Credentials:**
 
 -   Host: 127.0.0.1
 -   Port: ${PORT_MYSQL}
@@ -64,7 +64,7 @@ define( 'DB_COLLATE', '' );
 
 You can access any container shell by using the command `docker exec -it ${CONTAINER_NAME} sh` and `exit` to exit
 
-_Example by installing [Sage Starter Theme by the guys at root.io](https://roots.io/sage/):_
+_Example by installing [Sage Starter Theme by the guys @ root.io](https://roots.io/sage/):_
 
 ```bash
 # Access WP container
