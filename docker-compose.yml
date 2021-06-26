@@ -1,0 +1,97 @@
+version: '3.9'
+
+services:
+    nginx:
+        build:
+            context: .
+            dockerfile: etc/docker/nginx.dockerfile
+        container_name: ${APP_NAME}-nginx
+        restart: unless-stopped
+        tty: true
+        ports:
+            - ${PORT_NGINX}:80
+            - ${PORT_NGINX_SSL}:443
+        depends_on:
+            - php
+        volumes:
+            - ./server:/var/www/html
+            - ./etc/ssl:/etc/ssl
+            - ./etc/config/nginx.conf:/etc/nginx/conf.d/default.conf
+        links:
+            - php
+        networks:
+            - docker-wp
+    mysql:
+        image: mysql:5.7.34
+        container_name: ${APP_NAME}-dbserver
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        tty: true
+        volumes:
+            - ./etc/data/db_data:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        ports:
+            - ${PORT_MYSQL}:3306
+        networks:
+            - docker-wp
+    php:
+        build:
+            context: .
+            dockerfile: etc/docker/php.dockerfile
+        container_name: ${APP_NAME}-wp
+        restart: unless-stopped
+        volumes:
+            - ./etc/config/wordpress.ini:/usr/local/etc/php/conf.d/wordpress.ini
+            - ./server:/var/www/html
+        environment:
+            WORDPRESS_DB_HOST: dbserver
+            MYSQL_ROOT_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+            WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+            WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+            WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+            WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX}
+        depends_on:
+            - mysql
+        links:
+            - mysql
+        networks:
+            - docker-wp
+    dbadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: ${APP_NAME}-myadmin
+        restart: always
+        links:
+            - mysql
+        ports:
+            - ${PORT_PHP_MYADMIN}:80
+        environment:
+            MYSQL_USERNAME: root
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            PMA_ARBITRARY: 1
+        networks:
+            - docker-wp
+    mailhog:
+        image: mailhog/mailhog
+        ports:
+            - ${PORT_MAILHOG_SERVER}:1025
+            - ${PORT_MAILHOG_UI}:8025
+    portainer:
+        image: portainer/portainer-ce:alpine
+        container_name: ${APP_NAME}-portainer
+        restart: unless-stopped
+        ports:
+            - ${PORT_PORTAINER}:9000
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./etc/data/portainer_data:/data
+            - /etc/localtime:/etc/localtime:ro
+            - /etc/timezone:/etc/timezone:ro
+        networks:
+            - docker-wp
+networks:
+    docker-wp:
+        driver: bridge
