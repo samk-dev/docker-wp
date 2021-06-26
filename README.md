@@ -6,6 +6,17 @@ Local development setup for WordPress using Docker && Docker Compose with Nginx 
 
 We should set our enviornment variables and generate our self-signed ssl certificates. _If you don't want to enable ssl certificates please comment or remove the follwoing code to avoid errors. `docker-compose.yml` lines: 13 and 18 - `etc/config/nginx.conf` lines: 83 to the end of file_
 
+We adjust the variables in .env to suite our project the default ports are:
+
+-   Ngnix Http: 80
+-   Ngnix Https: 443
+-   PHP-FPM: 9001
+-   MySql: 3306
+-   PHP MyAdmin: 8080
+-   Mailhog Server: 1025
+-   Mailhog UI: 8025
+-   Portainer: 8000
+
 ### Preparing Stuff
 
 ```bash
@@ -19,6 +30,7 @@ cd docker-wp
 mv .env-example .env
 
 ## Generate Self-Signed SSL Certificate ##
+## This is not required if you don't need https and you did comment/remove the ssl settings ##
 
 # Navigate to scripts/
 cd etc/scripts/
@@ -43,15 +55,11 @@ from the project root run `docker-compose up -d` this will build and run the con
 
 **From any web browser access:**
 
-Webserver HTTP - [http://localhost:${PORT_NGINX}](http://localhost)
-
-Webserver HTTPS - [https://localhost:${PORT_NGINX}](https://localhost) - you may get a broswer alert of an insecure content, just press proceed anyway. On chrome sometimes you may not see the proceed button anyway, you can find a fix here: [Bypass invalid certificate in chrome - NET::ERR_CERT_INVALID error](https://dblazeski.medium.com/chrome-bypass-net-err-cert-invalid-for-development-daefae43eb12)
-
-PHP MyAdmin - [http://localhost:${PORT_PHP_MYADMIN}](http://localhost:8080)
-
-Mailhog - [http://localhost:${PORT_MAILHOG_UI}](http://localhost:8025)
-
-Portainer - [http://localhost:${PORT_MAILHOG_UI}](http://localhost:8025)
+-   Webserver HTTP - [http://localhost:${PORT_NGINX}](http://localhost)
+-   Webserver HTTPS - [https://localhost:${PORT_NGINX}](https://localhost) - you may get a broswer alert of an insecure content, just press proceed anyway. On chrome sometimes you may not see the proceed button anyway, you can find a fix here: [Bypass invalid certificate in chrome - NET::ERR_CERT_INVALID error](https://dblazeski.medium.com/chrome-bypass-net-err-cert-invalid-for-development-daefae43eb12)
+    -PHP MyAdmin - [http://localhost:${PORT_PHP_MYADMIN}](http://localhost:8080)
+-   Mailhog - [http://localhost:${PORT_MAILHOG_UI}](http://localhost:8025)
+-   Portainer - [http://localhost:${PORT_MAILHOG_UI}](http://localhost:8025)
 
 ## Connect to the Database
 
