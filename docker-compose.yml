@@ -61,6 +61,20 @@ services:
             - mailserver
         networks:
             - docker-wp
+    devserver:
+        build:
+            context: .
+            dockerfile: etc/docker/nodejs.dockerfile
+        container_name: ${APP_NAME}-dev
+        restart: unless-stopped
+        ports:
+            - ${PORT_NODEJS}:3000
+        volumes:
+            - ./app:/home/node/app/
+        stdin_open: true
+        tty: true
+        depends_on:
+            - appserver
     dbadmin:
         image: phpmyadmin/phpmyadmin
         container_name: ${APP_NAME}-myadmin

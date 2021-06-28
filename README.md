@@ -1,5 +1,7 @@
 # Docker WP
 
+**still work in progress**
+
 Local development setup for WordPress using Docker && Docker Compose with Nginx - PHP-FPM - MySql - PHP MyAdmin - Mailhog - Self-Signed SSL Certificates
 
 ## Getting Started
@@ -11,6 +13,7 @@ We adjust the variables in .env to suite our project the default ports are:
 -   Ngnix Http: 80
 -   Ngnix Https: 443
 -   PHP-FPM: 9001
+-   NodeJS: 3000
 -   MySql: 3306
 -   PHP MyAdmin: 8080
 -   Mailhog Server: 1025
