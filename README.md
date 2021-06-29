@@ -35,14 +35,11 @@ mv .env-example .env
 ## Generate Self-Signed SSL Certificate ##
 ## This is not required if you don't need https and you did comment/remove the ssl settings ##
 
-# Navigate to scripts/
-cd etc/scripts/
-
 # Give excution permissions to the script
-chmod u+x self-signed-init.sh
+chmod u+x chmod u+x etc/scripts/self-signed-init.sh
 
 # Execute the script
-./self-signed-init.sh localhost
+./etc/scripts/self-signed-init.sh localhost
 ```
 
 ### Starting Up Containers
