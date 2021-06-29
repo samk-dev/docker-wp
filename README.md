@@ -111,7 +111,7 @@ _Example by installing [Sage 10 Starter Theme by the guys @ root.io](https://roo
 
 ```bash
 # Access WP container
-docker exec -it docker-wp-wp sh
+docker exec -it docker-wp-dev sh
 
 # Navigate to wp-content/themes
 cd wp-content/themes
