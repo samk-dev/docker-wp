@@ -29,6 +29,6 @@ openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem \
 
 echo "All good.. Certificates generated sucessfully ✅"
 
-mv cert.pem etc/certs/live/${FQDN_OR_IP}/cert.pem
-mv key.pem etc/certs/live/${FQDN_OR_IP}/key.pem
+mv cert.pem etc/certs/live/${FQDN_OR_IP}/fullchain.pem
+mv key.pem etc/certs/live/${FQDN_OR_IP}/privkey.pem
 exit 0;
