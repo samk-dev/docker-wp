@@ -1,6 +1,6 @@
 # Docker WP
 
-**still work in progress**
+**⚠️ still work in progress ⚠️**
 
 Local development setup for WordPress using Docker && Docker Compose with Nginx - PHP-FPM - MySql - PHP MyAdmin - Mailhog - Self-Signed SSL Certificates
 
@@ -43,13 +43,6 @@ chmod u+x self-signed-init.sh
 
 # Execute the script
 ./self-signed-init.sh localhost
-
-# Navigate to etc/
-cd ..
-
-# Move certificates to etc/certs/live/localhost
-mv cert.pem certs/live/localhost/fullchain.pem
-mv key.pem certs/live/localhost/privkey.pem
 ```
 
 ### Starting Up Containers
@@ -71,6 +64,8 @@ The variables refrenced in the examples are the values you set in .env @ project
 ### wp-config.php
 
 _When running `docker-compose up` the first install will already fill the db credentials for you, so if you want to modify change the wp-config settings_
+
+_When installing WordPress set the email as: **dev@mailhog.local**_
 
 ```php
 /** MySQL settings - You can get this info from your web host **/
@@ -112,7 +107,7 @@ define( 'DB_COLLATE', '' );
 
 You can access any container shell by using the command `docker exec -it ${CONTAINER_NAME} sh` and `exit` to exit
 
-_Example by installing [Sage Starter Theme by the guys @ root.io](https://roots.io/sage/):_
+_Example by installing [Sage 10 Starter Theme by the guys @ root.io](https://roots.io/sage/):_
 
 ```bash
 # Access WP container
@@ -122,7 +117,7 @@ docker exec -it docker-wp-wp sh
 cd wp-content/themes
 
 # Install Sage
-composer create-project roots/sage your-theme-name
+composer create-project roots/sage your-theme-name dev-master
 
 # Navigate to your-theme-name
 cd your-theme-name
@@ -132,6 +127,8 @@ yarn
 # OR
 npm install
 ```
+
+**⚠️ HMR is not working ... working on a fix ⚠️**
 
 ### Mailhog Configuration
 
