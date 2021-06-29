@@ -43,9 +43,6 @@ RUN rm -rf /var/cache/apk/*
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy contents of src folder to WORKDIR
-COPY app .
-
 # Set read && write permissions
 RUN chmod 777 /var/www
 

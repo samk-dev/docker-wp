@@ -16,6 +16,3 @@ RUN mv nginx.conf default.conf
 
 # Change working dir to html dir
 WORKDIR /var/www/html
-
-# Copy all files to working dir
-COPY app .
