@@ -25,7 +25,7 @@ services:
 
     dbserver:
         image: mysql:latest
-        container_name: ${APP_NAME}-dbserver
+        container_name: ${APP_NAME}-mysql
         command: --default-authentication-plugin=mysql_native_password
         restart: always
         tty: true
@@ -45,18 +45,18 @@ services:
         build:
             context: .
             dockerfile: etc/docker/php.dockerfile
-        container_name: ${APP_NAME}-wp
+        container_name: ${APP_NAME}-php
         restart: unless-stopped
         volumes:
             - ./etc/config/wordpress.ini:/usr/local/etc/php/conf.d/wordpress.ini
             - ./app:/var/www/html
         environment:
-            WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
-            MYSQL_ROOT_PASSWORD: ${WORDPRESS_DB_PASSWORD}
-            WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
-            WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
-            WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
-            WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX}
+            WORDPRESS_DB_HOST: ${DB_HOST}
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+            WORDPRESS_DB_NAME: ${DB_NAME}
+            WORDPRESS_DB_USER: ${DB_ROOT_USER}
+            WORDPRESS_DB_PASSWORD: ${DB_ROOT_PASSWORD}
+            WORDPRESS_TABLE_PREFIX: ${DB_TABLE_PREFIX}
         depends_on:
             - dbserver
         links:
@@ -67,7 +67,7 @@ services:
 
     dbadmin:
         image: phpmyadmin/phpmyadmin
-        container_name: ${APP_NAME}-myadmin
+        container_name: ${APP_NAME}-phpmyadmin
         restart: always
         links:
             - dbserver
