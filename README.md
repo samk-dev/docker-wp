@@ -36,7 +36,7 @@ mv .env-example .env
 ## This is not required if you don't need https and you did comment/remove the ssl settings ##
 
 # Give excution permissions to the script
-chmod u+x chmod u+x etc/scripts/self-signed-init.sh
+chmod u+x etc/scripts/self-signed-init.sh
 
 # Execute the script
 ./etc/scripts/self-signed-init.sh localhost

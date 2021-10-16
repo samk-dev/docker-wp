@@ -1,7 +1,6 @@
-# Install WordPress with PHP-FPM Alpine
-FROM wordpress:5.7.2-php7.4-fpm-alpine
+FROM wordpress:5.8.1-php7.4-fpm-alpine
 
-# Install Alpine Packages
+# Install usefuel packages
 RUN apk add --update python3 python3-dev make cmake gcc g++ git pkgconf unzip wget py-pip build-base gsl libavc1394-dev libjpeg libjpeg-turbo-dev libpng-dev libdc1394-dev clang tiff-dev libwebp-dev linux-headers
 
 # Install soap and xml extensions
@@ -11,7 +10,7 @@ RUN set -ex && apk --no-cache add \
     php7-xml
 RUN docker-php-ext-install soap
 
-# Install some tools
+# Install some dev tools
 RUN apk update \
     && apk add less vim nano \
     msmtp \
@@ -26,7 +25,7 @@ RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.ph
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Install && Configure sendmail
+# Install && Configure sendmail to use mailhog
 RUN curl --location --output /usr/local/bin/mhsendmail https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64 && \
     chmod +x /usr/local/bin/mhsendmail  
 

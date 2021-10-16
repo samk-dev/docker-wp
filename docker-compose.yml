@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
-    webserver:
+    nginxserver:
         build:
             context: .
             dockerfile: etc/docker/nginx.dockerfile
@@ -12,17 +12,19 @@ services:
             - ${PORT_NGINX}:80
             - ${PORT_NGINX_SSL}:443
         depends_on:
-            - appserver
+            - phpserver
         volumes:
             - ./app:/var/www/html
             - ./etc/certs:/etc/letsencrypt
             - ./etc/config/nginx.conf:/etc/nginx/conf.d/default.conf
         links:
-            - appserver
+            - phpserver
+            - dbserver
         networks:
             - docker-wp
+
     dbserver:
-        image: mysql:8.0
+        image: mysql:latest
         container_name: ${APP_NAME}-dbserver
         command: --default-authentication-plugin=mysql_native_password
         restart: always
@@ -30,15 +32,16 @@ services:
         volumes:
             - ./etc/data/db_data:/var/lib/mysql
         environment:
-            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-            MYSQL_DATABASE: ${MYSQL_DATABASE}
-            MYSQL_USER: ${MYSQL_USER}
-            MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${DB_NAME}
+            MYSQL_USER: ${DB_USER}
+            MYSQL_PASSWORD: ${DB_ROOT_PASSWORD}
         ports:
-            - ${PORT_MYSQL}:3306
+            - ${PORT_DB}:3306
         networks:
             - docker-wp
-    appserver:
+
+    phpserver:
         build:
             context: .
             dockerfile: etc/docker/php.dockerfile
@@ -48,7 +51,7 @@ services:
             - ./etc/config/wordpress.ini:/usr/local/etc/php/conf.d/wordpress.ini
             - ./app:/var/www/html
         environment:
-            WORDPRESS_DB_HOST: dbserver
+            WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
             MYSQL_ROOT_PASSWORD: ${WORDPRESS_DB_PASSWORD}
             WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
             WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
@@ -61,20 +64,7 @@ services:
             - mailserver
         networks:
             - docker-wp
-    devserver:
-        build:
-            context: .
-            dockerfile: etc/docker/nodejs.dockerfile
-        container_name: ${APP_NAME}-dev
-        restart: unless-stopped
-        ports:
-            - ${PORT_NODEJS}:3000
-        volumes:
-            - ./app:/home/node/app/
-        stdin_open: true
-        tty: true
-        depends_on:
-            - appserver
+
     dbadmin:
         image: phpmyadmin/phpmyadmin
         container_name: ${APP_NAME}-myadmin
@@ -82,34 +72,23 @@ services:
         links:
             - dbserver
         ports:
-            - ${PORT_PHP_MYADMIN}:80
+            - ${PORT_DB_ADMIN}:80
         environment:
-            MYSQL_USERNAME: ${MYSQL_ROOT_USER}
-            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_USERNAME: ${DB_ROOT_USER}
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
             PMA_ARBITRARY: 1
         networks:
             - docker-wp
+
     mailserver:
         image: mailhog/mailhog
         container_name: ${APP_NAME}-mailhog
         ports:
-            - ${PORT_MAILHOG_SERVER}:1025
-            - ${PORT_MAILHOG_UI}:8025
+            - ${PORT_MAIL_SERVER}:1025
+            - ${PORT_MAIL_UI}:8025
         networks:
             - docker-wp
-    portainer:
-        image: portainer/portainer-ce:alpine
-        container_name: ${APP_NAME}-portainer
-        restart: unless-stopped
-        ports:
-            - ${PORT_PORTAINER}:9000
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
-            - ./etc/data/portainer_data:/data
-            - /etc/localtime:/etc/localtime:ro
-            - /etc/timezone:/etc/timezone:ro
-        networks:
-            - docker-wp
+
 networks:
     docker-wp:
         driver: bridge
