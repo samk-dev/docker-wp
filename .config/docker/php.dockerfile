@@ -12,12 +12,16 @@ RUN docker-php-ext-install soap
 
 # Install some dev tools
 RUN apk update \
+    && apk upgrade \
     && apk add less vim nano \
     msmtp \
-    && apk add -u musl
+    && apk add -u musl \
+    && apk add bash \
+    && apk add jq \
+    && apk add sed
 
 # Append path automatically so that user doesn't have to
-ADD etc/scripts/wp /usr/local/bin/wp
+ADD .config/scripts/wp /usr/local/bin/wp
 
 # Install WP-CLI
 RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp-cli && chmod +x /usr/local/bin/wp
@@ -42,9 +46,17 @@ RUN rm -rf /var/cache/apk/*
 # Set working directory
 WORKDIR /var/www/html
 
+COPY . .
+
 # Set read && write permissions
 RUN chmod 777 /var/www
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
-CMD ["php-fpm"]
+
+RUN chmod u+x docker-start.sh
+
+RUN chmod u+x ./.config/scripts
+
+RUN ./docker-start.sh localhost
+#CMD ["php-fpm"]

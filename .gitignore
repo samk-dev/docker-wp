@@ -4,22 +4,22 @@
 .env
 
 ### DB ###
-etc/data
+.config/data
 
 ### SSL files ###
-etc/certs/live/**/**.pem
+.config/certs/live/**/**.pem
 
 ### WordPress General ###
-app/wp-admin
-app/wp-includes
-app/**.php
-app/**.txt
-app/**.html
-app/**.htaccess
+wp-admin
+wp-includes
+**.php
+**.txt
+**.html
+**.htaccess
 
 ### WordPress Content ###
-app/wp-content/plugins
-app/wp-content/themes/twenty**
+wp-content/plugins
+wp-content/themes/twenty**
 
 ### Linux ###
 *~

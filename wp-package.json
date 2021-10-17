@@ -1,0 +1,7 @@
+{
+    "free": {
+        "wp-mail-smtp": "3.1.0",
+        "woocommerce": "5.8.0"
+    },
+    "premium": {}
+}

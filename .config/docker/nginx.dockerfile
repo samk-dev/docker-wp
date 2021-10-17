@@ -9,7 +9,7 @@ RUN apk update \
 WORKDIR /etc/nginx/conf.d
 
 # Copy Ngnix configuration to the container
-COPY etc/config/nginx.conf .
+COPY .config/etc/nginx.conf .
 
 # Rename Ngnix config file
 RUN mv nginx.conf default.conf

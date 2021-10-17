@@ -20,7 +20,7 @@ fi
 
 if [ ! -d "etc/certs/live/${FQDN_OR_IP}" ]; then
     echo "INFO: making certs directory"
-    mkdir -p etc/certs/live/${FQDN_OR_IP}
+    mkdir -p .config/certs/live/${FQDN_OR_IP}
 fi
 
 # generate and add keys
@@ -29,6 +29,6 @@ openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem \
 
 echo "All good.. Certificates generated sucessfully ✅"
 
-mv cert.pem etc/certs/live/${FQDN_OR_IP}/fullchain.pem
-mv key.pem etc/certs/live/${FQDN_OR_IP}/privkey.pem
+mv cert.pem .config/certs/live/${FQDN_OR_IP}/fullchain.pem
+mv key.pem .config/certs/live/${FQDN_OR_IP}/privkey.pem
 exit 0;
